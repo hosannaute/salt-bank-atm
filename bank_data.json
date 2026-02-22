@@ -1,0 +1,28 @@
+{
+    "23456789": {
+        "name": "Mary Jane",
+        "pin": 1234,
+        "balance": 25200,
+        "history": [
+            "[2026-02-22 13:48:20] TRANSFER IN: N200 from 87654321"
+        ]
+    },
+    "87654321": {
+        "name": "Mark Thomas",
+        "pin": 1122,
+        "balance": 64800,
+        "history": [
+            "[2026-02-22 13:47:38] DEPOSIT: N20000 ",
+            "[2026-02-22 13:48:20] TRANSFER OUT: N200 to 23456789"
+        ]
+    },
+    "75266537": {
+        "name": "Hosanna Ute",
+        "pin": 2006,
+        "balance": 2000000,
+        "history": [
+            "[2026-02-22 13:54:45] SYSTEM: N0 Account Created",
+            "[2026-02-22 13:55:47] DEPOSIT: N2000000 "
+        ]
+    }
+}
