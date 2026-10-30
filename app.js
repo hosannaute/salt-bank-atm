@@ -4,12 +4,11 @@ const money = (n) => '₦' + Number(n).toLocaleString('en-NG', {minimumFractionD
 let user, mode = 'register', currentView = 'overview', action, balanceHidden = false, busy = false, toastTimer;
 const names = {deposit:'Money added',withdraw:'Cash withdrawal',transfer:'Transfer sent',received:'Transfer received',account:'Welcome to Salt Bank'};
 const icons = {deposit:'↓',withdraw:'↗',transfer:'⇄',received:'↙',account:'✳'};
+const bank = new SaltBank();
 async function api(path, data) {
-  const response = await fetch('/api/' + path, {method:data === undefined ? 'GET' : 'POST', headers:data === undefined ? {} : {'Content-Type':'application/json'}, body:data === undefined ? undefined : JSON.stringify(data)});
-  const result = await response.json();
-  if (!response.ok) throw new Error(result.error || 'Something went wrong. Please try again.');
-  return result;
+  return bank.request(path, data);
 }
+
 function toast(message) { $('#toast').textContent = message; $('#toast').hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => $('#toast').hidden = true, 3500); }
 function authMode(next) {
   mode = next; const register = mode === 'register';
@@ -18,7 +17,7 @@ function authMode(next) {
   $('#account-field').hidden = register; $('#account-field input').disabled = register; $('#account-field input').required = !register;
   $('#auth-title').textContent = register ? 'Welcome to your everyday bank.' : 'Good to have you back.';
   $('#auth-subtitle').textContent = register ? 'A fresh start. A card with your name on it.' : 'Your account number and practice PIN are all you need.';
-  $('#auth-submit').textContent = register ? 'Open my account ↗' : 'Sign in securely ↗';
+  $('#auth-submit').textContent = register ? 'Open my account ↗' : 'Sign in ↗';
   $('#auth-form input[name="pin"]').autocomplete = register ? 'new-password' : 'current-password';
   $('#auth-error').textContent = '';
 }
@@ -83,7 +82,7 @@ function openTransaction(kind, amount) {
   $('#transaction-entry').hidden = false; $('#transaction-success').hidden = true; $('#transaction-error').textContent = '';
   $('#dialog-title').textContent = {deposit:'A little boost to your balance.',withdraw:'Let’s get you some cash.',transfer:'Send a little something.'}[kind];
   $('#dialog-icon').textContent = icons[kind];
-  $('#dialog-description').textContent = {deposit:'Add simulated money. Your real bank is never charged.',withdraw:'Choose multiples of ₦500, up to ₦100,000.',transfer:'Send practice money to another Salt Bank simulator account.'}[kind];
+  $('#dialog-description').textContent = {deposit:'Add simulated money. Your real bank is never charged.',withdraw:'Choose multiples of ₦500, up to ₦100,000.',transfer:'Send practice money to another account created in this browser.'}[kind];
   $('#recipient-label').hidden = kind !== 'transfer'; form.elements.target.required = kind === 'transfer'; form.elements.target.disabled = kind !== 'transfer';
   $('#transaction-pin').hidden = kind === 'deposit'; form.elements.pin.required = kind !== 'deposit'; form.elements.pin.disabled = kind === 'deposit';
   form.elements.amount.step = kind === 'withdraw' ? '500' : '1'; form.elements.amount.min = kind === 'withdraw' ? '500' : '1'; form.elements.amount.max = kind === 'withdraw' ? '100000' : '1000000';
@@ -120,3 +119,9 @@ $('#transaction-form').onsubmit = async event => {
 $('#date-label').textContent = new Date().toLocaleDateString('en-NG',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).toUpperCase();
 $('#year').textContent = new Date().getFullYear();
 (async () => { try { user = await api('me'); showApp(); } catch { $('#auth').hidden = false; } })();
+
+window.addEventListener('focus', async () => {
+  if (!user || busy || $('#transaction-dialog').open) return;
+  try { user = await api('me'); render(); }
+  catch (error) { toast(error.message); }
+});

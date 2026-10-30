@@ -1,0 +1,13 @@
+{
+  "name": "salt-bank-atm",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Browser-only ATM simulator built with HTML, CSS and JavaScript",
+  "scripts": {
+    "start": "node serve.cjs",
+    "test": "node bank.test.cjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
