@@ -1,5 +1,9 @@
 # Salt Bank · ATM Simulator
 
+**[▶ Open the browser demo](https://hosannaute.github.io/salt-bank-atm/)** · No download or installation needed once GitHub Pages is enabled.
+
+For a quick tour: create a practice account, add simulated funds, then try the ATM and collect a receipt. No real banking details are needed.
+
 A responsive ATM simulator built entirely with **HTML, CSS, and vanilla JavaScript**. No Python backend, framework, package installation, or build step is required.
 
 - Register an account and receive a virtual debit card.
@@ -59,3 +63,21 @@ Tests cover registration, hashed PINs, persistence, transfers, invalid transacti
 ## Legacy terminal app
 
 The original `salt_bank_atm.py` and `bank_data.json` are preserved as a separate legacy CLI. The website does not read or modify that data. The previous Python web server has been replaced by the browser-only implementation.
+
+## Publish the recruiter demo
+
+The static app is published to the `gh-pages` branch. Enable it once in [repository Pages settings](https://github.com/hosannaute/salt-bank-atm/settings/pages):
+
+1. Under **Build and deployment**, choose **Deploy from a branch**.
+2. Select **gh-pages** and **/ (root)**, then **Save**.
+3. Wait for the Pages deployment to finish. The demo address is `https://hosannaute.github.io/salt-bank-atm/`.
+
+For a prominent link on the repository home page, open the gear beside **About**, set **Website** to that address, and save.
+
+After committing future app changes, refresh the website branch with:
+
+```bash
+npm run deploy
+```
+
+This publishes only HTML, CSS, JavaScript, the favicon, and `.nojekyll`. It preserves website branch history and excludes source tests, legacy account data, and local databases. Publishing the branch does not itself enable Pages; the repository setting above is required.
